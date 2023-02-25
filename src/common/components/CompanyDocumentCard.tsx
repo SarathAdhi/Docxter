@@ -37,54 +37,28 @@ const CompanyDocumentCard: React.FC<Props> = ({
   }
 
   return (
-    <Card>
+    <Card size="sm" width="full" className="!rounded-md">
       <CardHeader>
         <h1>{name}</h1>
       </CardHeader>
 
-      <CardFooter justify="space-between" gap={2}>
-        <Popover placement="bottom-end">
-          {({ isOpen, onClose }) => (
-            <>
-              <PopoverTrigger>
-                <Button flex="1" colorScheme="red" variant="outline">
-                  Delete
-                </Button>
-              </PopoverTrigger>
-
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverHeader>Are you sure you want to delete?</PopoverHeader>
-                <PopoverBody className="flex justify-end gap-2">
-                  <Button
-                    flex="1"
-                    colorScheme="red"
-                    variant="outline"
-                    onClick={onClose}
-                  >
-                    No
-                  </Button>
-
-                  <Button
-                    flex="1"
-                    colorScheme="red"
-                    onClick={() => {
-                      handleDocumentDelete(id, filePath).then(() => {
-                        onClose();
-                        getCompanyDocuments?.();
-                      });
-                    }}
-                  >
-                    Yes
-                  </Button>
-                </PopoverBody>
-              </PopoverContent>
-            </>
-          )}
-        </Popover>
+      <CardFooter className="!flex !flex-wrap gap-2">
+        <Button
+          className="!text-xs sm:!text-base"
+          flex="1"
+          colorScheme="red"
+          variant="outline"
+          onClick={() => {
+            handleDocumentDelete(id, filePath).then(() => {
+              getCompanyDocuments?.();
+            });
+          }}
+        >
+          Delete
+        </Button>
 
         <Button
+          className="!text-xs sm:!text-base"
           as={Link}
           variant="outline"
           href={`/docx/automate/${uuid}`}
@@ -95,6 +69,7 @@ const CompanyDocumentCard: React.FC<Props> = ({
         </Button>
 
         <Button
+          className="!text-xs sm:!text-base"
           as={Link}
           variant="outline"
           href={`/docx/${uuid}`}
