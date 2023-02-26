@@ -1,4 +1,5 @@
 import { delDoc } from "@/backend/lib";
+import { isDayTenToday } from "@/utils/daysDifference";
 import { useStore } from "@/utils/store";
 import {
   Card,
@@ -27,6 +28,7 @@ const CompanyDocumentCard: React.FC<Props> = ({
   filePath,
   uuid,
   getCompanyDocuments,
+  createdAt,
 }) => {
   const { getUserDocuments } = useStore();
 
@@ -36,10 +38,17 @@ const CompanyDocumentCard: React.FC<Props> = ({
     getUserDocuments();
   }
 
+  const isDayTen = isDayTenToday(createdAt);
+
   return (
     <Card size="sm" width="full" className="!rounded-md">
       <CardHeader>
-        <h1>{name}</h1>
+        <h1>
+          {name}{" "}
+          {isDayTen && (
+            <span className="text-base text-red-500">{`(Document Deleted)`}</span>
+          )}
+        </h1>
       </CardHeader>
 
       <CardFooter className="!flex !flex-wrap gap-2">

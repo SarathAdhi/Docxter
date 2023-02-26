@@ -23,6 +23,8 @@ import FileUpload from "@/common/components/elements/FileUpload";
 import { useRouter } from "next/router";
 import { where } from "firebase/firestore";
 import { filterDoc } from "@/backend/lib";
+import { isDayTenToday } from "@/utils/daysDifference";
+import { Document } from "@/common/types/document";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -46,9 +48,8 @@ function loadFile(
 const Automate = () => {
   const [excelRows, setExcelRows] = useState<Row[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [fileLink, setFileLink] = useState("");
+  const [document, setDocument] = useState<Document | null>(null);
   const [fileNameAttribute, setFileNameAttribute] = useState("");
-  const [documentAttributeData, setDocumentAttributeData] = useState({});
 
   const router = useRouter();
 
@@ -57,8 +58,9 @@ const Automate = () => {
   async function getCompanyDocument() {
     const data = await filterDoc("document", where("uuid", "==", id));
 
-    setFileLink(data[0].fileLink);
-    setDocumentAttributeData(data[0].attributes);
+    if (data.length !== 0) {
+      setDocument(data[0]);
+    }
 
     setIsLoading(false);
   }
@@ -74,6 +76,19 @@ const Automate = () => {
       </PageLayout>
     );
 
+  if (!document) return <h2 className="text-center">Document not found</h2>;
+
+  const { attributes, fileLink, createdAt } = document;
+
+  const isDayTen = isDayTenToday(createdAt);
+
+  if (isDayTen)
+    return (
+      <h2 className="text-center">
+        The document have been expired and deleted.
+      </h2>
+    );
+
   function generateDocument() {
     if (!fileLink) return toast.error("File doesn't exist");
 
@@ -85,9 +100,6 @@ const Automate = () => {
       }
 
       const headerNames = excelRows[0];
-      const fileNameAttributeIndex = headerNames.filter(
-        (e) => e === fileNameAttribute
-      );
 
       excelRows.map((rows, index) => {
         if (index === 0) return;
@@ -126,8 +138,7 @@ const Automate = () => {
     });
   }
 
-  const attributesArray =
-    documentAttributeData && Object.keys(documentAttributeData);
+  const attributesArray = attributes && Object.keys(attributes);
 
   return (
     <PageLayout className="flex flex-col gap-5">

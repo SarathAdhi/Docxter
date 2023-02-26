@@ -7,4 +7,8 @@ export const pages = [
     name: "Upload",
     href: "/docx/upload",
   },
+  {
+    name: "Help",
+    href: "/help",
+  },
 ];

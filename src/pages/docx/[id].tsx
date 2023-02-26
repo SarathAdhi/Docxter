@@ -15,7 +15,8 @@ import {
 import { Document } from "@/common/types/document";
 import PageLayout from "@/common/layouts/PageLayout";
 import withAuth from "@/common/hoc/withAuth";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import DataTypesForm from "@/modules/Docx/DataTypesForm";
+import { isDayTenToday } from "@/utils/daysDifference";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -36,29 +37,42 @@ function loadFile(
   PizZipUtils.getBinaryContent(url, callback);
 }
 
+const options = {
+  paragraphLoop: true,
+  linebreaks: true,
+};
+
 const ViewDocument = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [companyDocument, setCompanyDocument] = useState<Document | null>(null);
+  const [document, setDocument] = useState<Document | null>(null);
   const [documentAttributeData, setDocumentAttributeData] = useState({});
-
-  const [parent] = useAutoAnimate({
-    duration: 5000,
-  });
+  const [attributesName, setAttributesName] = useState<string[]>([]);
+  const [attributesDataTypes, setAttributesDataTypes] = useState({});
 
   const router = useRouter();
 
   const id = router.query?.id || "";
 
-  async function getCompanyDocument() {
+  async function getDocument() {
     const data = await filterDoc("document", where("uuid", "==", id));
 
-    setCompanyDocument(data[0]);
+    setDocument(data[0]);
+
+    if (data) {
+      const _attributesArray = data[0].attributes
+        ? Object.entries(data[0].attributes)
+        : [];
+
+      const _isAttributesFilled = _attributesArray?.length !== 0;
+
+      if (!_isAttributesFilled) generateDataTypesForm(data[0].fileLink);
+    }
 
     setIsLoading(false);
   }
 
   useEffect(() => {
-    if (id) getCompanyDocument();
+    if (id) getDocument();
   }, [id]);
 
   if (isLoading)
@@ -68,10 +82,46 @@ const ViewDocument = () => {
       </div>
     );
 
-  if (!companyDocument)
-    return <h3 className="text-center">Document not found</h3>;
+  if (!document) return <h3 className="text-center">Document not found</h3>;
 
-  const { fileLink, attributes, name, uuid } = companyDocument;
+  const { fileLink, attributes, name, createdAt, id: documentId } = document;
+
+  const isDayTen = isDayTenToday(createdAt);
+
+  if (isDayTen)
+    return (
+      <h2 className="text-center">
+        The document have been expired and deleted.
+      </h2>
+    );
+
+  function generateDataTypesForm(fileLink: string) {
+    if (!fileLink) return;
+
+    loadFile(fileLink, function (error: Error, content: string) {
+      if (error) throw error;
+
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, options);
+
+      const text = doc.getFullText();
+
+      const regx = /{([^}]+)}/g;
+
+      let attributesName = text.match(regx) as string[];
+
+      attributesName = attributesName?.map((e) => e.replace(/[\])}[{(]/g, ""));
+
+      const initialValues = attributesName?.reduce(
+        (pre, cur) => ({ ...pre, [cur]: "string" }),
+        {}
+      );
+
+      setAttributesDataTypes(initialValues);
+
+      setAttributesName(attributesName);
+    });
+  }
 
   const generateDocument = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,36 +153,65 @@ const ViewDocument = () => {
     });
   };
 
-  const attributesArray = attributes && Object.entries(attributes);
+  const attributesArray = attributes ? Object.entries(attributes) : [];
+
+  const isAttributesFilled = attributesArray.length !== 0;
+
+  const FillDataTypesForm = () => (
+    <>
+      {attributesName.length !== 0 && (
+        <DataTypesForm
+          documentId={documentId}
+          handleSelectChange={(key, value) =>
+            setAttributesDataTypes({
+              ...attributesDataTypes,
+              [key]: value,
+            })
+          }
+          handleSubmitCallBack={() => {
+            setDocument({ ...document, attributes: attributesDataTypes });
+
+            setAttributesDataTypes({});
+            setAttributesName([]);
+          }}
+          {...{ attributesDataTypes, attributesName }}
+        />
+      )}
+    </>
+  );
 
   return (
     <PageLayout>
-      <form
-        onSubmit={generateDocument}
-        className="bg-white rounded-md p-5 grid place-items-start grid-cols-1 md:grid-cols-2 gap-5 w-full"
-      >
-        {attributesArray.map((attribute) => (
-          <FormControl key={attribute[0]} label={attribute[0]} isRequired>
-            <FormLabel>{attribute[0]}</FormLabel>
+      {isAttributesFilled ? (
+        <form
+          onSubmit={generateDocument}
+          className="bg-white rounded-md p-5 grid place-items-start grid-cols-1 md:grid-cols-2 gap-5 w-full"
+        >
+          {attributesArray.map((attribute) => (
+            <FormControl key={attribute[0]} label={attribute[0]} isRequired>
+              <FormLabel>{attribute[0]}</FormLabel>
 
-            <Input
-              name={attribute[0]}
-              placeholder={`Enter your variable ${attribute[0]}`}
-              type={attribute[1] as string}
-              onChange={(e) =>
-                setDocumentAttributeData({
-                  ...documentAttributeData,
-                  [attribute[0]]: e.target.value,
-                })
-              }
-            />
-          </FormControl>
-        ))}
+              <Input
+                name={attribute[0]}
+                placeholder={`Enter your variable ${attribute[0]}`}
+                type={attribute[1] as string}
+                onChange={(e) =>
+                  setDocumentAttributeData({
+                    ...documentAttributeData,
+                    [attribute[0]]: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          ))}
 
-        <Button type="submit" colorScheme="green">
-          Download Document
-        </Button>
-      </form>
+          <Button type="submit" colorScheme="green">
+            Download Document
+          </Button>
+        </form>
+      ) : (
+        <FillDataTypesForm />
+      )}
     </PageLayout>
   );
 };

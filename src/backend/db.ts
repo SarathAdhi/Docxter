@@ -17,6 +17,7 @@ const app = initializeApp(firebaseConfig);
 
 export const dbFireStore = getFirestore(app);
 export const storage = getStorage(app);
+
 export const userCollectionRef = collection(dbFireStore, "users");
 export const documentCollectionRef = collection(dbFireStore, "document");
 

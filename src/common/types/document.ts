@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export type Document = {
   id: string;
   uuid: string;
@@ -6,4 +8,5 @@ export type Document = {
   fileLink: string;
   companyId: string;
   attributes: {};
+  createdAt: Timestamp;
 };

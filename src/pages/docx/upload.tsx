@@ -17,6 +17,7 @@ import { useStore } from "@/utils/store";
 import DocumentLimitExceededPage from "@/modules/Docx/DocumentLimitExceeded";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { Timestamp } from "firebase/firestore";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -117,6 +118,7 @@ function UploadPage() {
         name: document.name,
         attributes: {},
         user: user?.uid,
+        createdAt: Timestamp.now(),
       });
 
       setDocument({
@@ -156,6 +158,7 @@ function UploadPage() {
             onOpen();
           }}
           required
+          multiple={false}
         />
 
         <Button
@@ -222,6 +225,9 @@ function UploadPage() {
               name: e.target.value,
             })
           }
+          onKeyDown={(e) => {
+            if (e.key === "Enter") uploadDocument();
+          }}
         />
       </Modal>
     </PageLayout>
