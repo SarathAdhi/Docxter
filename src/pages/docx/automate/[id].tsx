@@ -148,7 +148,7 @@ const Automate = () => {
           data as shown below.
         </h2>
         <h3>
-          <em>Note: Order doesn't matter.</em>
+          <em>{"Note: Order doesn't matter."}</em>
         </h3>
 
         <Table mt={5}>
