@@ -23,7 +23,9 @@ export const useFirebaseLogin = () => {
           email: user?.email,
         });
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log({ error });
+      });
   }
 
   return { handleLogin };

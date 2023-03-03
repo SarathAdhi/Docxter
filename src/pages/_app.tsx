@@ -14,13 +14,13 @@ export default function App({ Component, pageProps }: AppProps) {
   const { getUserDocuments } = useStore();
 
   async function appLoadingFetchAction() {
-    await getUserDocuments();
+    if (user) await getUserDocuments();
     setIsLoading(false);
   }
 
   useEffect(() => {
     appLoadingFetchAction();
-  });
+  }, [user]);
 
   if (loading || isLoading) return <LoadingPage />;
 
