@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     appLoadingFetchAction();
-  }, []);
+  });
 
   if (loading || isLoading) return <LoadingPage />;
 

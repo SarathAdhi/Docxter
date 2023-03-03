@@ -1,11 +1,10 @@
 import { auth } from "@/backend/db";
-import { useStore } from "@/utils/store";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const withAuth = (Component: React.FC) =>
-  function pageProp({ ...pageProps }) {
+  function PageProp({ ...pageProps }) {
     const [user] = useAuthState(auth);
     const router = useRouter();
 
@@ -15,7 +14,7 @@ const withAuth = (Component: React.FC) =>
       if (!isAuth) {
         router.replace("/");
       }
-    }, [user]);
+    }, [isAuth]);
 
     return <Component {...pageProps} />;
   };

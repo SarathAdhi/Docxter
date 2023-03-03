@@ -17,6 +17,7 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
+import Image from "next/image";
 
 const Navbar = () => {
   const { logout } = useStore();
@@ -57,14 +58,25 @@ const Navbar = () => {
       <header className="p-3 w-full flex flex-col items-center bg-slate-200 border-b">
         <div className="max-w-full w-[1280px] flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/docxter.svg" className="w-28 sm:w-44" />
+            <Image
+              width={100}
+              height={100}
+              src="/docxter.svg"
+              className="w-28 sm:w-44"
+              alt="Docxter Logo"
+            />
           </Link>
 
           <NavLinks className="hidden sm:flex" />
 
-          <Button className="!block sm:!hidden" onClick={onOpen}>
-            NV
-          </Button>
+          <button className="!block sm:!hidden" onClick={onOpen}>
+            <Image
+              src="/assets/menu-burger.svg"
+              width={20}
+              height={20}
+              alt="Menu"
+            />
+          </button>
         </div>
       </header>
 
