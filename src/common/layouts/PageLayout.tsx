@@ -17,6 +17,11 @@ const PageLayout: React.FC<Component & Props> = ({
     <>
       <Head>
         <title>{title}</title>
+        <meta
+          name="description"
+          content="Docxter automatically combines templates with data to produce documents of extraordinary quality. Make templating easy."
+        />
+        <meta name="robots" content="index, follow" />
       </Head>
 
       <main className="min-h-screen flex flex-col items-center bg-slate-300">

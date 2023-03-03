@@ -141,7 +141,10 @@ const Automate = () => {
   const attributesArray = attributes && Object.keys(attributes);
 
   return (
-    <PageLayout className="flex flex-col gap-5">
+    <PageLayout
+      title={`Automate | Docx - ${document.name}`}
+      className="flex flex-col gap-5"
+    >
       <div className="grid gap-2">
         <h2>
           Upload your <strong>EXCEL</strong> file with the Attributes name and

@@ -181,7 +181,7 @@ const ViewDocument = () => {
   );
 
   return (
-    <PageLayout>
+    <PageLayout title={`Docx - ${document.name}`}>
       {isAttributesFilled ? (
         <form
           onSubmit={generateDocument}

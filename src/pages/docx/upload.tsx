@@ -136,7 +136,10 @@ function UploadPage() {
   if (userDocumentLimit) return <DocumentLimitExceededPage />;
 
   return (
-    <PageLayout className="flex flex-col items-start gap-5">
+    <PageLayout
+      title="Docxter | Upload"
+      className="flex flex-col items-start gap-5"
+    >
       <h2>
         Upload your{" "}
         <Link
