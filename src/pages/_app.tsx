@@ -14,7 +14,10 @@ export default function App({ Component, pageProps }: AppProps) {
   const { getUserDocuments } = useStore();
 
   async function appLoadingFetchAction() {
-    if (user) await getUserDocuments();
+    if (user) {
+      localStorage.setItem("token", user.uid);
+      await getUserDocuments();
+    }
     setIsLoading(false);
   }
 

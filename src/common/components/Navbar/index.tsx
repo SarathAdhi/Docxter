@@ -19,9 +19,8 @@ import {
 import Image from "next/image";
 
 const Navbar = () => {
-  const { logout } = useStore();
-
   const [user] = useAuthState(auth);
+  const { logout } = useStore();
 
   const { handleLogin } = useFirebaseLogin();
   const { isOpen, onOpen, onClose } = useDisclosure();

@@ -1,11 +1,14 @@
 import { auth } from "@/backend/db";
 import { addDoc, filterDoc } from "@/backend/lib";
+import { useStore } from "@/utils/store";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { where } from "firebase/firestore";
 
 const provider = new GoogleAuthProvider();
 
 export const useFirebaseLogin = () => {
+  const { getUserDocuments } = useStore();
+
   async function handleLogin() {
     signInWithPopup(auth, provider)
       .then(async (result) => {
@@ -26,6 +29,8 @@ export const useFirebaseLogin = () => {
       .catch((error) => {
         console.log({ error });
       });
+
+    await getUserDocuments();
   }
 
   return { handleLogin };

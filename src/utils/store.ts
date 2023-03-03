@@ -17,6 +17,8 @@ export const useStore = create<UseStoreProps>((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     signOut(auth);
+
+    set({ documents: [] });
   },
 
   getUserDocuments: async () => {

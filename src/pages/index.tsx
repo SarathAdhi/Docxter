@@ -9,7 +9,7 @@ const Employee = () => {
   const [parent] = useAutoAnimate();
 
   return (
-    <PageLayout className="flex flex-col gap-4">
+    <PageLayout title="Docxter | Home" className="flex flex-col gap-4">
       <h2>Your Documents {`(${documents.length} / 3)`}</h2>
 
       <div
