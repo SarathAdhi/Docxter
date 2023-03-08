@@ -12,13 +12,13 @@ const HomePage = () => {
           <span>Stop copying and pasting and save time by scripting.</span>
         </h1>
 
-        <p>
+        <p className="font-medium">
           Enterprises use a variety of template-based documents, from sales
           invoices to internal correspondence. Although time-saving, it is
           repetitive and subject to human mistake. Enterprises can easily
-          automate document production with DocGen's template-based document
-          generation solution from Docshifter. bringing together information and
-          Microsoft Word layouts automatically.
+          automate document production with Docxter template-based document
+          generation. Bringing together information and Microsoft Word layouts
+          automatically.
         </p>
       </div>
 
