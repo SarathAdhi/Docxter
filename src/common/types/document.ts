@@ -9,4 +9,5 @@ export type Document = {
   companyId: string;
   attributes: {};
   createdAt: Timestamp;
+  finalFile?: string;
 };

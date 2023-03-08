@@ -1,7 +1,7 @@
 export const pages = [
   {
-    name: "Home",
-    href: "/",
+    name: "Dashboard",
+    href: "/dashboard",
   },
   {
     name: "Upload",

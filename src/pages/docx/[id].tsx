@@ -4,7 +4,7 @@ import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
 import { useRouter } from "next/router";
-import { filterDoc } from "@/backend/lib";
+import { fileUpload, filterDoc, updateDoc } from "@/backend/lib";
 import {
   Button,
   FormControl,
@@ -17,6 +17,10 @@ import PageLayout from "@/common/layouts/PageLayout";
 import withAuth from "@/common/hoc/withAuth";
 import DataTypesForm from "@/modules/Docx/DataTypesForm";
 import { isDayTenToday } from "@/utils/daysDifference";
+import { getDownloadURL } from "firebase/storage";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/backend/db";
+import Link from "next/link";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -48,6 +52,8 @@ const ViewDocument = () => {
   const [documentAttributeData, setDocumentAttributeData] = useState({});
   const [attributesName, setAttributesName] = useState<string[]>([]);
   const [attributesDataTypes, setAttributesDataTypes] = useState({});
+
+  const [user] = useAuthState(auth);
 
   const router = useRouter();
 
@@ -84,7 +90,14 @@ const ViewDocument = () => {
 
   if (!document) return <h3 className="text-center">Document not found</h3>;
 
-  const { fileLink, attributes, name, createdAt, id: documentId } = document;
+  const {
+    fileLink,
+    attributes,
+    name,
+    createdAt,
+    id: documentId,
+    finalFile,
+  } = document;
 
   const isDayTen = isDayTenToday(createdAt);
 
@@ -149,6 +162,20 @@ const ViewDocument = () => {
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       });
 
+      const filePath = `${user?.uid}/${document.uuid}-template.docx`;
+
+      let fileLink = "";
+
+      try {
+        const { ref } = await fileUpload(filePath, out);
+
+        fileLink = await getDownloadURL(ref);
+
+        await updateDoc("document", documentId, {
+          finalFile: fileLink,
+        });
+      } catch (error) {}
+
       saveAs(out, `${name}.docx`);
     });
   };
@@ -205,9 +232,17 @@ const ViewDocument = () => {
             </FormControl>
           ))}
 
-          <Button type="submit" colorScheme="green">
-            Download Document
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-5">
+            <Button type="submit" colorScheme="green">
+              Download Document
+            </Button>
+
+            {finalFile && (
+              <Button as={"a"} href={finalFile} download={true}>
+                Download Previous Document
+              </Button>
+            )}
+          </div>
         </form>
       ) : (
         <FillDataTypesForm />

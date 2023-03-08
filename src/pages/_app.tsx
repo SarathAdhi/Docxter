@@ -6,26 +6,33 @@ import { auth } from "@/backend/db";
 import LoadingPage from "@/common/components/LoadingPage";
 import { useStore } from "@/utils/store";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+const ignorePagesPath = ["/", "/help"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const [user, loading] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(true);
 
+  const router = useRouter();
+
   const { getUserDocuments } = useStore();
 
-  async function appLoadingFetchAction() {
+  const ignorePage = ignorePagesPath.includes(router.asPath);
+
+  function appLoadingFetchAction() {
     if (user) {
       localStorage.setItem("token", user.uid);
-      await getUserDocuments();
+      getUserDocuments();
     }
     setIsLoading(false);
   }
 
   useEffect(() => {
-    appLoadingFetchAction();
-  }, [user]);
+    if (!ignorePage) appLoadingFetchAction();
+  }, [user, ignorePage]);
 
-  if (loading || isLoading) return <LoadingPage />;
+  if (!ignorePage && (loading || isLoading)) return <LoadingPage />;
 
   return (
     <ChakraProvider>

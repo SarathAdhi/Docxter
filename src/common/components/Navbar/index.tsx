@@ -15,11 +15,12 @@ import {
   DrawerCloseButton,
   Button,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import Image from "next/image";
 
 const Navbar = () => {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const { logout } = useStore();
 
   const { handleLogin } = useFirebaseLogin();
@@ -43,7 +44,6 @@ const Navbar = () => {
           colorScheme="green"
           className="!font-bold"
           onClick={handleLogin}
-          // isLoading={isLoading}
         >
           Login
         </Button>
@@ -54,7 +54,7 @@ const Navbar = () => {
   return (
     <>
       <header className="p-3 w-full flex flex-col items-center bg-slate-200 border-b">
-        <div className="max-w-full w-[1280px] flex items-center justify-between">
+        <div className="px-2 sm:px-5 max-w-full w-[1280px] flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Image
               width={100}
@@ -65,7 +65,7 @@ const Navbar = () => {
             />
           </Link>
 
-          <NavLinks className="hidden sm:flex" />
+          {loading ? <Spinner /> : <NavLinks className="hidden sm:flex" />}
 
           <button className="!block sm:!hidden" onClick={onOpen}>
             <Image

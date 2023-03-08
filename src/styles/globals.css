@@ -22,3 +22,10 @@
   height: auto !important;
   padding: 10px !important;
 }
+
+.text-decor-line {
+  width: 32px;
+  border: 2px solid #0048ff;
+  border-radius: 50px;
+  margin: 5px 0px;
+}
