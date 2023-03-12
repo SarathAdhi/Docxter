@@ -21,6 +21,7 @@ import { getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/backend/db";
 import Link from "next/link";
+import ErrorPage from "@/common/components/ErrorPage";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -64,7 +65,7 @@ const ViewDocument = () => {
 
     setDocument(data[0]);
 
-    if (data) {
+    if (data && data.length !== 0) {
       const _attributesArray = data[0].attributes
         ? Object.entries(data[0].attributes)
         : [];
@@ -88,7 +89,7 @@ const ViewDocument = () => {
       </div>
     );
 
-  if (!document) return <h3 className="text-center">Document not found</h3>;
+  if (!document) return <ErrorPage text="Document not found" />;
 
   const {
     fileLink,
@@ -102,11 +103,7 @@ const ViewDocument = () => {
   const isDayTen = isDayTenToday(createdAt);
 
   if (isDayTen)
-    return (
-      <h2 className="text-center">
-        The document have been expired and deleted.
-      </h2>
-    );
+    return <ErrorPage text="The document have been expired and deleted." />;
 
   function generateDataTypesForm(fileLink: string) {
     if (!fileLink) return;

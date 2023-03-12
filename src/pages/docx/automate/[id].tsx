@@ -25,6 +25,7 @@ import { where } from "firebase/firestore";
 import { filterDoc } from "@/backend/lib";
 import { isDayTenToday } from "@/utils/daysDifference";
 import { Document } from "@/common/types/document";
+import ErrorPage from "@/common/components/ErrorPage";
 
 let PizZipUtils: any;
 if (typeof window !== "undefined") {
@@ -76,18 +77,14 @@ const Automate = () => {
       </PageLayout>
     );
 
-  if (!document) return <h2 className="text-center">Document not found</h2>;
+  if (!document) return <ErrorPage text="Document not found" />;
 
   const { attributes, fileLink, createdAt } = document;
 
   const isDayTen = isDayTenToday(createdAt);
 
   if (isDayTen)
-    return (
-      <h2 className="text-center">
-        The document have been expired and deleted.
-      </h2>
-    );
+    return <ErrorPage text="The document have been expired and deleted." />;
 
   function generateDocument() {
     if (!fileLink) return toast.error("File doesn't exist");

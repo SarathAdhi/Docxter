@@ -6,13 +6,13 @@ import React from "react";
 const HomePage = () => {
   return (
     <PageLayout title="Docxter | Home" className="flex flex-col gap-10">
-      <div className="px-20 grid place-content-center gap-5 h-[500px]">
+      <div className="grid place-content-center gap-5 h-[500px]">
         <h1 className="!font-black md:!text-5xl grid">
           <span>Automated creation of documents.</span>{" "}
           <span>Stop copying and pasting and save time by scripting.</span>
         </h1>
 
-        <p className="font-medium">
+        <p className="font-medium !text-xl">
           Enterprises use a variety of template-based documents, from sales
           invoices to internal correspondence. Although time-saving, it is
           repetitive and subject to human mistake. Enterprises can easily
