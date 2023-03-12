@@ -6,8 +6,8 @@ import React from "react";
 const HomePage = () => {
   return (
     <PageLayout title="Docxter | Home" className="flex flex-col gap-10">
-      <div className="grid place-content-center gap-5">
-        <h1 className="!font-extrabold grid">
+      <div className="px-20 grid place-content-center gap-5 h-[500px]">
+        <h1 className="!font-black md:!text-5xl grid">
           <span>Automated creation of documents.</span>{" "}
           <span>Stop copying and pasting and save time by scripting.</span>
         </h1>
@@ -65,7 +65,7 @@ const HomePage = () => {
             height={500}
             alt="Docx Example"
             className="w-full md:w-80 lg:w-[500px] rounded-md"
-            src="/assets/templated-doc-ex.png"
+            src="/assets/download-docx.png"
           />
         </div>
 
@@ -75,7 +75,7 @@ const HomePage = () => {
             height={500}
             alt="Docx Example"
             className="w-full md:w-80 lg:w-[500px] rounded-md"
-            src="/assets/download-docx.png"
+            src="/assets/templated-doc-ex.png"
           />
 
           <div>
