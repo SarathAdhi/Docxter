@@ -1,13 +1,17 @@
 import CompanyDocumentCard from "@/common/components/CompanyDocumentCard";
 import PageLayout from "@/common/layouts/PageLayout";
 import { useStore } from "@/utils/store";
-import React from "react";
+import React, { useEffect } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import withAuth from "@/common/hoc/withAuth";
 
 const Employee = () => {
-  const { documents } = useStore();
+  const { documents, getUserDocuments } = useStore();
   const [parent] = useAutoAnimate();
+
+  useEffect(() => {
+    getUserDocuments();
+  }, []);
 
   return (
     <PageLayout title="Docxter | Dashboard" className="flex flex-col gap-4">

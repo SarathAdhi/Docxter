@@ -12,6 +12,9 @@
   h3 {
     @apply !text-xl md:!text-2xl !font-semibold;
   }
+  h4 {
+    @apply !text-xl !font-semibold;
+  }
   p {
     @apply !text-base md:!text-lg;
   }

@@ -23,8 +23,8 @@ export const useStore = create<UseStoreProps>((set) => ({
 
   getUserDocuments: async () => {
     const token = localStorage.getItem("token");
-    const documents = await filterDoc("document", where("user", "==", token));
-
+    let documents = await filterDoc("document", where("user", "==", token));
+    documents.reverse();
     set({ documents });
   },
 }));

@@ -138,9 +138,9 @@ function UploadPage() {
   return (
     <PageLayout
       title="Docxter | Upload"
-      className="flex flex-col items-start gap-5"
+      className="flex flex-col items-start gap-10"
     >
-      <h2>
+      <h4 className="w-full text-center">
         Upload your{" "}
         <Link
           className="text-blue-700 italic underline"
@@ -149,9 +149,9 @@ function UploadPage() {
           Template Document
         </Link>{" "}
         here and give types for your attributes for validation.
-      </h2>
+      </h4>
 
-      <div className="mt-2 grid gap-2 place-items-start">
+      <div className="w-full grid place-content-center gap-2">
         <FileUpload
           name="excelFile"
           label="Upload you document"
@@ -164,12 +164,14 @@ function UploadPage() {
           multiple={false}
         />
 
-        <Button
-          onClick={generateDataTypesForm}
-          isDisabled={!fileUrl && !document.name}
-        >
-          Generate Form
-        </Button>
+        {file && (
+          <Button
+            onClick={generateDataTypesForm}
+            isDisabled={!fileUrl && !document.name}
+          >
+            Generate Form
+          </Button>
+        )}
       </div>
 
       {attributesName.length !== 0 && (
