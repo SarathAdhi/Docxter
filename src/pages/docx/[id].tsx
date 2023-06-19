@@ -1,6 +1,6 @@
 import { where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import Docxtemplater from "docxtemplater";
+import Docxtemplater, { DXT } from "docxtemplater";
 import PizZip from "pizzip";
 import { saveAs } from "file-saver";
 import { useRouter } from "next/router";
@@ -42,7 +42,7 @@ function loadFile(
   PizZipUtils.getBinaryContent(url, callback);
 }
 
-const options = {
+const options: DXT.ConstructorOptions = {
   paragraphLoop: true,
   linebreaks: true,
 };
@@ -52,7 +52,9 @@ const ViewDocument = () => {
   const [document, setDocument] = useState<Document | null>(null);
   const [documentAttributeData, setDocumentAttributeData] = useState({});
   const [attributesName, setAttributesName] = useState<string[]>([]);
-  const [attributesDataTypes, setAttributesDataTypes] = useState({});
+  const [attributesDataTypes, setAttributesDataTypes] = useState<{
+    [key: string]: string;
+  }>({});
 
   const [user] = useAuthState(auth);
 
@@ -116,6 +118,8 @@ const ViewDocument = () => {
 
       const text = doc.getFullText();
 
+      console.log({ text });
+
       const regx = /{([^}]+)}/g;
 
       let attributesName = text.match(regx) as string[];
@@ -129,7 +133,9 @@ const ViewDocument = () => {
 
       setAttributesDataTypes(initialValues);
 
-      setAttributesName(attributesName);
+      const removeDuplicateNames = new Set<string>(attributesName);
+
+      setAttributesName([...removeDuplicateNames]);
     });
   }
 
@@ -209,25 +215,27 @@ const ViewDocument = () => {
       {isAttributesFilled ? (
         <form
           onSubmit={generateDocument}
-          className="bg-white rounded-md p-5 grid place-items-start grid-cols-1 md:grid-cols-2 gap-5 w-full"
+          className="bg-white rounded-md p-5 grid place-items-end gap-5 w-full"
         >
-          {attributesArray.map((attribute) => (
-            <FormControl key={attribute[0]} label={attribute[0]} isRequired>
-              <FormLabel>{attribute[0]}</FormLabel>
+          <div className="w-full grid place-items-start grid-cols-1 md:grid-cols-2 gap-5 ">
+            {attributesArray.map((attribute) => (
+              <FormControl key={attribute[0]} label={attribute[0]} isRequired>
+                <FormLabel>{attribute[0]}</FormLabel>
 
-              <Input
-                name={attribute[0]}
-                placeholder={`Enter your variable ${attribute[0]}`}
-                type={attribute[1] as string}
-                onChange={(e) =>
-                  setDocumentAttributeData({
-                    ...documentAttributeData,
-                    [attribute[0]]: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
-          ))}
+                <Input
+                  name={attribute[0]}
+                  placeholder={`Enter your variable ${attribute[0]}`}
+                  type={attribute[1] as string}
+                  onChange={(e) =>
+                    setDocumentAttributeData({
+                      ...documentAttributeData,
+                      [attribute[0]]: e.target.value,
+                    })
+                  }
+                />
+              </FormControl>
+            ))}
+          </div>
 
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-5">
             <Button type="submit" colorScheme="green">

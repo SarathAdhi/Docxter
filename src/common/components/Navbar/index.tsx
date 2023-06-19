@@ -53,7 +53,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="p-3 w-full flex flex-col items-center bg-slate-200 border-b">
+      <header className="p-3 w-full flex flex-col items-center shadow-md border-b">
         <div className="px-2 sm:px-5 max-w-full w-[1280px] h-12 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Image

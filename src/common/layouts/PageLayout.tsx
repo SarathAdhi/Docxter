@@ -24,7 +24,7 @@ const PageLayout: React.FC<Component & Props> = ({
         <meta name="robots" content="index, follow" />
       </Head>
 
-      <main className="min-h-screen flex flex-col items-center bg-slate-300">
+      <main className="min-h-screen flex flex-col items-center bg-white">
         <Navbar />
 
         <div

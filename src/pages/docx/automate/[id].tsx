@@ -143,23 +143,26 @@ const Automate = () => {
       className="flex flex-col gap-5"
     >
       <div className="grid gap-2">
-        <h2>
+        <h3 className="text-center">
           Upload your <strong>EXCEL</strong> file with the Attributes name and
           data as shown below.
-        </h2>
-        <h3>
-          <em>{"Note: Order doesn't matter."}</em>
         </h3>
 
-        <Table mt={5}>
-          <Thead>
-            <Tr>
-              {attributesArray.map((data, index) => (
-                <Th key={data + index}>{data}</Th>
-              ))}
-            </Tr>
-          </Thead>
-        </Table>
+        <p className="text-center">
+          <em>{"Note: Order doesn't matter."}</em>
+        </p>
+
+        <div className="!overflow-auto">
+          <Table mt={5}>
+            <Thead>
+              <Tr>
+                {attributesArray.map((data, index) => (
+                  <Th key={data + index}>{data}</Th>
+                ))}
+              </Tr>
+            </Thead>
+          </Table>
+        </div>
       </div>
 
       <div className="mt-5 bg-slate-200 p-2 sm:p-4 rounded-md grid gap-5">

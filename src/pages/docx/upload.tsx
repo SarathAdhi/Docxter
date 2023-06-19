@@ -39,7 +39,7 @@ function loadFile(
 }
 
 const options = {
-  paragraphLoop: true,
+  paragraphLoop: false,
   linebreaks: true,
 };
 
@@ -86,7 +86,9 @@ function UploadPage() {
 
       setAttributesDataTypes(initialValues);
 
-      setAttributesName(attributesName);
+      const removeDuplicateNames = new Set<string>(attributesName);
+
+      setAttributesName([...removeDuplicateNames]);
     });
   }
 
@@ -158,6 +160,11 @@ function UploadPage() {
           types={["docx", "odt"]}
           handleChange={(e) => {
             setFile(e);
+            setDocument({
+              ...document,
+              name: e.name.split(".")[0],
+            });
+
             onOpen();
           }}
           required
@@ -224,6 +231,7 @@ function UploadPage() {
       >
         <Input
           placeholder="Enter a name for your Document"
+          value={document.name}
           onChange={(e) =>
             setDocument({
               ...document,

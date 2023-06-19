@@ -18,6 +18,9 @@
   p {
     @apply !text-base md:!text-lg;
   }
+  .pd {
+    @apply p-2 sm:p-4;
+  }
 }
 
 .sc-bcXHqe {

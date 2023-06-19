@@ -1,19 +1,7 @@
 import { delDoc } from "@/backend/lib";
 import { isDayTenToday } from "@/utils/daysDifference";
 import { useStore } from "@/utils/store";
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
-} from "@chakra-ui/react";
+import { Card, CardHeader, CardFooter, Button } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { Document } from "../types/document";
@@ -43,12 +31,12 @@ const CompanyDocumentCard: React.FC<Props> = ({
   return (
     <Card size="sm" width="full" className="!rounded-md">
       <CardHeader>
-        <h1>
+        <h3>
           {name}{" "}
           {isDayTen && (
             <span className="text-base text-red-500">{`(Document Deleted)`}</span>
           )}
-        </h1>
+        </h3>
       </CardHeader>
 
       <CardFooter className="!flex !flex-wrap gap-2">

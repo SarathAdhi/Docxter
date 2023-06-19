@@ -1,4 +1,5 @@
 import PageLayout from "@/common/layouts/PageLayout";
+import DocxSteps from "@/modules/Home/DocxSteps";
 import { Badge, Divider } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,24 +52,6 @@ const HelpPage = () => {
               attributes within <em>square brackets</em>. This attributes will
               be replaced by the data that is give by you.
             </p>
-
-            <div className="w-full grid lg:grid-cols-2 place-content-center gap-2">
-              <Image
-                width={600}
-                height={600}
-                className="rounded-md"
-                src="/assets/document-template-ex.png"
-                alt="Document template example"
-              />
-
-              <Image
-                width={600}
-                height={600}
-                className="rounded-md"
-                src="/assets/templated-doc-ex.png"
-                alt="Templated Document example"
-              />
-            </div>
           </div>
 
           <div className="grid place-items-start gap-2">
@@ -92,6 +75,8 @@ const HelpPage = () => {
             </h3>
           </div>
         </div>
+
+        <DocxSteps />
       </section>
     </PageLayout>
   );
